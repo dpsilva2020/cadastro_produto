@@ -51,9 +51,52 @@ def opcoes():
         cursor.execute(f"DELETE FROM PRD_PRODUTO WHERE CD_PRODUTO='{cd_prd_deletar}'")
         banco.commit()
         print(f'O produto {cd_prd_deletar} foi deletado!')
+    elif opcoes_entrada==4:
+        print('-'*30)
+        print('MOVIMENTAÇÕES DE ESTOQUE')
+        print('-'*30)
+        estoque_opcoes=int(input('1-Entrada \n 2-Saida \n 3-Consultar'))
+        if estoque_opcoes==1:
+                import sqlite3
+                banco= sqlite3.connect('sistema.db')
+                cursor=banco.cursor()
+                cd_produto=int(input('Codigo do produto: '))
+                cursor.execute(f"SELECT * FROM PRD_PRODUTO WHERE CD_PRODUTO={cd_produto}")
+                print(cursor.fetchall())
+                dt_mov=input('Data de Movimentação: ')
+                qtde_produto=int(input('Quantidade Entrada: '))
+                cursor.execute(f"INSERT INTO PRD_ESTOQUE (CD_PRODUTO,QUANTIDADE,TIPO,DT_MOV) VALUES ('{cd_produto}','{qtde_produto}','E','{dt_mov}')")
+                banco.commit()
+                print(f'Foram adicionados {qtde_produto} do produto {cd_produto}')
+        elif estoque_opcoes==2:
+                import sqlite3
+                banco= sqlite3.connect('sistema.db')
+                cursor=banco.cursor()
+                cd_produto=int(input('Codigo do produto: '))
+                cursor.execute(f"SELECT * FROM PRD_ESTOQUE WHERE CD_PRODUTO={cd_produto}")
+                print(cursor.fetchall())
+                dt_mov=input('Data de Movimentação: ')
+                qtde_produto=int(input('Quantidade saida: '))
+                qtde_produto_saida=qtde_produto*-1
+                cursor.execute(f"INSERT INTO PRD_ESTOQUE (CD_PRODUTO,QUANTIDADE,TIPO,DT_MOV) VALUES ('{cd_produto}','{qtde_produto_saida}','S','{dt_mov}')")
+                banco.commit()
+                print(f'Foram RETIRADOS {qtde_produto} do produto {cd_produto}')
+        elif estoque_opcoes==3:
+                import sqlite3
+                banco= sqlite3.connect('sistema.db')
+                cursor=banco.cursor()
+                cd_produto=int(input('Codigo do produto: '))
+                cursor.execute(f"SELECT E.CD_PRODUTO AS CODIGO,P.NOME_PRODUTO,SUM(E.QUANTIDADE) AS SALDO,MAX(E.DT_MOV) AS DATA_MOVIMENTACOES FROM PRD_ESTOQUE E LEFT JOIN PRD_PRODUTO P ON E.CD_PRODUTO=P.CD_PRODUTO WHERE E.CD_PRODUTO={cd_produto}")
+                print(cursor.fetchall())
+        else:
+            print('-'*50)
+            print('FIM')
+            print('-'*50)
     else:
         print('Nenhuma Opção foi selecionada!')
 
 
-opcoes_entrada=int(input('O que deseja fazer? \n 1-Cadastrar um produto \n 2-Alterar um Cadastro \n 3-Excluir um cadastro\n Resposta:   '))
+opcoes_entrada=int(input('O que deseja fazer? \n 1-Cadastrar um produto \n 2-Alterar um Cadastro \n 3-Excluir um cadastro\n 4-Estoque \n Resposta:   '))
+opcoes()
+opcoes_entrada=int(input('O que deseja fazer? \n 1-Cadastrar um produto \n 2-Alterar um Cadastro \n 3-Excluir um cadastro\n 4-Estoque \n Resposta:   '))
 opcoes()
