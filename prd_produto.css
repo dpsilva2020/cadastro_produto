@@ -1,0 +1,20 @@
+.produto{
+    position: absolute;
+    width: 70px;
+    height: 1024px;
+    left: 0px;
+    top: 0px;
+
+    background: #27302F;
+}
+
+.menu_produto{
+    position: absolute;
+    width: 647px;
+    height: 609px;
+    left: 481px;
+    top: 285px;
+
+    background: #C4C4C4;
+    border-radius: 34px;
+}
